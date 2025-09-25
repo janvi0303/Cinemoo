@@ -1,0 +1,131 @@
+/* quiz.component.css */
+.main {
+  background-image:  url('src/app/quiz/_cinema-.gif');
+  position: relative;
+  background-attachment: fixed;
+  margin: 0;
+  height: 100%;
+}
+
+.quiz-popup {
+  width: 60%;
+  border-radius: 2% ;
+  border-color: #FFBF00;
+  border-width: 1px;
+  border-style: solid;
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 4%;
+  background-color: rgba(2, 51, 69, 0.7);
+  transition: transform 0.3s ease-in-out;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-family: 'Allura', serif;
+  color: #dcb642;
+  font-weight: bolder;
+  word-spacing: 6px;
+  letter-spacing: 1px;
+  font-size: 45px;
+}
+
+.question {
+  min-width: 700px;
+  /* Set a minimum width for each question box */
+  height: 320px;
+  /* Set the height for the question boxes */
+  margin-right: 10%;
+  /* Add some spacing between question boxes */
+  padding-bottom: 20px;
+  /* Add padding for better spacing */
+  background-color: #f9f9f900;
+  /* Add background color */
+  border-radius: 8px;
+  /* Add border radius */
+  /* Add border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Add box shadow */
+  margin-bottom: 20px;
+  border-radius: 8px;
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+  color: #fffacd;
+}
+p{
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: large;
+  font-weight: lighter;
+  color: #fffacd; 
+  font-size:small;
+}
+.options label:hover {
+  background-color: #fff6a1c7;
+  /* Change to desired hover color */
+  cursor: pointer;
+  color: #000000;
+}
+
+.options label {
+  padding: 2%;
+  border: 1px solid;
+  border-color: #dcb642;
+  display: block;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 200px;
+  margin: 20px auto 0;
+  background: linear-gradient(to right, #8aa5e4,#617dbd);
+  color: rgb(255, 242, 242);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Arial', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(to right,#6175a3, #8aa5e4);
+}
+
+.quiz-container {
+  height: 690px;
+  display: flex;
+  justify-content: center;
+}
+
+
+.questions-container {
+  padding-left: 5%;
+  padding-right: 5%;
+  display: flex;
+  flex-wrap: nowrap;
+  /* Make sure questions don't wrap to the next line */
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
+}
+
+/* Hide scroll bar for webkit browsers */
+.questions-container::-webkit-scrollbar {
+  display: none;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-btn {
+  margin-top: 20px;
+}
+
+.result {
+  margin-top: 20px;
+}

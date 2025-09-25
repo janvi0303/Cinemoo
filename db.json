@@ -1,0 +1,106 @@
+{
+  "users": [
+    {
+      "fullName": "test user",
+      "email": "test1@gmail.com",
+      "password": "1234",
+      "id": "1"
+    },
+    {
+      "fullName": "test Data",
+      "email": "test@gmail.com",
+      "password": "1234",
+      "id": "2"
+    },
+    {
+      "id": "06ea",
+      "fullName": "joe dnse",
+      "email": "jo@gmail.com",
+      "password": "1234user"
+    },
+    {
+      "id": "ea79",
+      "fullName": "melonie kiro",
+      "email": "melon@gmail.com",
+      "password": "1234melon"
+    },
+    {
+      "id": "53bc",
+      "fullName": "abc xyz",
+      "email": "abc@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "cace",
+      "fullName": "Vaidehi Kale",
+      "email": "abcd@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "aecb",
+      "fullName": "snehal k",
+      "email": "snehalpk@gmail.com",
+      "password": "asdf"
+    },
+    {
+      "id": "ebd1",
+      "fullName": "jerry tim",
+      "email": "jerry@gmail.com",
+      "password": "1234user"
+    },
+    {
+      "id": "ca60",
+      "fullName": "puro pun",
+      "email": "pur@gmail.com",
+      "password": "1234pum"
+    },
+    {
+      "id": "67ac",
+      "fullName": "puro pun",
+      "email": "pur@gmail.com",
+      "password": "1234pum"
+    },
+    {
+      "id": "861b",
+      "fullName": "ken wiz",
+      "email": "k@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "5f07",
+      "fullName": "Charles Benz",
+      "email": "charles@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "c8ae",
+      "fullName": "Charles Benz",
+      "email": "charles@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "f503",
+      "fullName": "charles benz",
+      "email": "c@gmail.com",
+      "password": "1111"
+    },
+    {
+      "id": "6d44",
+      "fullName": "hajera ali",
+      "email": "haj@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "660a",
+      "fullName": "janvuii",
+      "email": "abwc@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "5edf",
+      "fullName": "hehe ho",
+      "email": "he@gmail.com",
+      "password": "1234"
+    }
+  ]
+}
