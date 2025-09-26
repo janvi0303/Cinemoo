@@ -112,7 +112,9 @@ streamlit run appnew.py
 3. When the user clicks the **recommendation button**, Angular sends user preferences to the Python backend (`appnew.py` via Streamlit).
 4. The Python backend processes the request and returns movie recommendations, which are displayed in the UI.
 
-![Content Based Recommendation GIF](contentbased.gif)
+<p align="center">
+  <img src="contentbased.gif" alt="Content Based Recommendation GIF" width="500"/>
+</p>
 
 ---
 
