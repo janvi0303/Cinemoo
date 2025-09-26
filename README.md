@@ -113,7 +113,7 @@ streamlit run appnew.py
 4. The Python backend processes the request and returns movie recommendations, which are displayed in the UI.
 
 <p align="center">
-  <img src="contentbased.gif" alt="Content Based Recommendation GIF" width="500"/>
+  <img src="contentbased.gif" alt="Content Based Recommendation GIF" width="400" height="400"/>
 </p>
 
 ---
