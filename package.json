@@ -3,12 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "render-build": "npm install && ng build --configuration production",
-    "render-start": "ng serve"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -18,14 +16,13 @@
     "@angular/forms": "^14.2.0",
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
-    "@angular/platform-server": "^14.2.0",
     "@angular/router": "^14.2.0",
     "canvas-confetti": "^1.9.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4",
     "express": "^4.18.0",
-    "@angular/ssr": "^14.2.0"
+    "json-server": "^0.17.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.9",
