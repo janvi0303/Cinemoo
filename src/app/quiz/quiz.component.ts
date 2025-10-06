@@ -1,178 +1,437 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 interface Question {
   id: number;
   text: string;
+  type: 'mood' | 'setting' | 'genre' | 'style' | 'character';
   options: Option[];
+  nextQuestion?: number; // Default next question
 }
 
 interface Option {
   text: string;
   value: string;
-  image?: string;
   genrePoints: { [key: string]: number };
+  nextQuestion?: number; // Specific next question based on choice
 }
 
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html'
 })
-export class QuizComponent implements OnInit {
+export class QuizComponent {
   currentQuestionIndex = 0;
   answers: string[] = [];
   showResult = false;
-  resultGenre = '';
-  resultMessage = '';
+  topGenres: string[] = [];
+  userProfile: any = {};
   
+  // Question flow based on user choices
   questions: Question[] = [
+    // Initial mood-based questions
     {
       id: 1,
+      type: 'mood',
       text: "How are you feeling right now?",
       options: [
         {
-          text: "Happy & Energetic",
-          value: "happy",
-          image: "https://images.unsplash.com/photo-1533227268428-f9ed0900fb3b?w=200&h=200&fit=crop",
-          genrePoints: { comedy: 3, adventure: 2, animation: 1 }
+          text: "Happy and energetic",
+          value: "happy_energetic",
+          genrePoints: { comedy: 3, adventure: 2, musical: 2 },
+          nextQuestion: 2
         },
         {
-          text: "Thoughtful & Reflective",
-          value: "thoughtful",
-          image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=200&h=200&fit=crop",
-          genrePoints: { drama: 4, romance: 2, documentary: 1 }
+          text: "Thoughtful and reflective",
+          value: "thoughtful_reflective",
+          genrePoints: { drama: 3, romance: 2, documentary: 2 },
+          nextQuestion: 3
         },
         {
-          text: "Adventurous & Excited",
-          value: "adventurous",
-          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
-          genrePoints: { adventure: 4, action: 3, thriller: 2 }
+          text: "Excited and adventurous",
+          value: "excited_adventurous",
+          genrePoints: { adventure: 3, action: 2, scifi: 2 },
+          nextQuestion: 4
         },
         {
-          text: "Cozy & Relaxed",
-          value: "cozy",
-          image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop",
-          genrePoints: { romance: 3, comedy: 2, drama: 1 }
+          text: "Cozy and relaxed",
+          value: "cozy_relaxed",
+          genrePoints: { romance: 3, comedy: 2, drama: 1 },
+          nextQuestion: 5
         }
-      ]
+      ],
+      nextQuestion: 2
     },
+    // Follow-up for happy/energetic
     {
       id: 2,
-      text: "What's your ideal movie night?",
+      type: 'setting',
+      text: "What kind of happy ending do you prefer?",
       options: [
         {
-          text: "Laughing with friends",
-          value: "friends",
-          image: "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?w=200&h=200&fit=crop",
-          genrePoints: { comedy: 4, animation: 2, adventure: 1 }
+          text: "Big celebration with friends",
+          value: "celebration_friends",
+          genrePoints: { comedy: 3, musical: 2, romance: 1 },
+          nextQuestion: 6
         },
         {
-          text: "Romantic date night",
-          value: "romantic",
-          image: "https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=200&h=200&fit=crop",
-          genrePoints: { romance: 4, drama: 2, comedy: 1 }
+          text: "Romantic sunset moment",
+          value: "romantic_sunset",
+          genrePoints: { romance: 3, drama: 2 },
+          nextQuestion: 7
         },
         {
-          text: "Thrilling solo experience",
-          value: "solo",
-          image: "https://images.unsplash.com/photo-1489599809505-f3b2a0d50e61?w=200&h=200&fit=crop",
-          genrePoints: { thriller: 4, mystery: 3, horror: 2 }
-        },
-        {
-          text: "Family movie time",
-          value: "family",
-          image: "https://images.unsplash.com/photo-1484712401471-05c7215830eb?w=200&h=200&fit=crop",
-          genrePoints: { animation: 3, comedy: 2, adventure: 2 }
+          text: "Heroic victory",
+          value: "heroic_victory",
+          genrePoints: { action: 3, adventure: 2 },
+          nextQuestion: 8
         }
-      ]
+      ],
+      nextQuestion: 6
     },
+    // Follow-up for thoughtful/reflective
     {
       id: 3,
-      text: "What setting excites you most?",
+      type: 'character',
+      text: "Which character journey resonates with you?",
       options: [
         {
-          text: "Futuristic worlds",
-          value: "futuristic",
-          image: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=200&h=200&fit=crop",
-          genrePoints: { scifi: 4, action: 2, adventure: 1 }
+          text: "Someone finding their purpose",
+          value: "finding_purpose",
+          genrePoints: { drama: 3, biography: 2 },
+          nextQuestion: 9
         },
         {
-          text: "Historical eras",
-          value: "historical",
-          image: "https://images.unsplash.com/photo-1481277542470-605612bd2d61?w=200&h=200&fit=crop",
-          genrePoints: { drama: 3, romance: 2, adventure: 2 }
+          text: "Overcoming personal struggles",
+          value: "overcoming_struggles",
+          genrePoints: { drama: 3, romance: 2 },
+          nextQuestion: 10
         },
         {
-          text: "Mysterious locations",
-          value: "mysterious",
-          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
-          genrePoints: { mystery: 4, thriller: 3, adventure: 1 }
-        },
-        {
-          text: "Urban city life",
-          value: "urban",
-          image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=200&h=200&fit=crop",
-          genrePoints: { comedy: 3, drama: 2, romance: 2 }
+          text: "Solving a complex mystery",
+          value: "solving_mystery",
+          genrePoints: { mystery: 3, thriller: 2 },
+          nextQuestion: 11
         }
-      ]
+      ],
+      nextQuestion: 9
     },
+    // Follow-up for excited/adventurous
     {
       id: 4,
-      text: "What emotional journey do you prefer?",
+      type: 'setting',
+      text: "What adventure setting excites you most?",
       options: [
         {
-          text: "Heartwarming & uplifting",
-          value: "uplifting",
-          image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=200&h=200&fit=crop",
-          genrePoints: { comedy: 3, romance: 2, drama: 1 }
+          text: "Ancient ruins and lost civilizations",
+          value: "ancient_ruins",
+          genrePoints: { adventure: 3, fantasy: 2 },
+          nextQuestion: 12
         },
         {
-          text: "Intense & suspenseful",
-          value: "suspenseful",
-          image: "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=200&h=200&fit=crop",
-          genrePoints: { thriller: 4, mystery: 3, horror: 2 }
+          text: "Futuristic space exploration",
+          value: "space_exploration",
+          genrePoints: { scifi: 3, adventure: 2 },
+          nextQuestion: 13
         },
         {
-          text: "Epic & adventurous",
-          value: "epic",
-          image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=200&h=200&fit=crop",
-          genrePoints: { adventure: 4, action: 3, scifi: 1 }
+          text: "Urban jungle and modern challenges",
+          value: "urban_jungle",
+          genrePoints: { action: 3, thriller: 2 },
+          nextQuestion: 14
+        }
+      ],
+      nextQuestion: 12
+    },
+    // Follow-up for cozy/relaxed
+    {
+      id: 5,
+      type: 'style',
+      text: "What's your ideal cozy movie style?",
+      options: [
+        {
+          text: "Heartwarming family stories",
+          value: "family_stories",
+          genrePoints: { comedy: 2, drama: 2, romance: 1 },
+          nextQuestion: 15
         },
         {
-          text: "Deep & meaningful",
-          value: "meaningful",
-          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
-          genrePoints: { drama: 4, documentary: 2, romance: 1 }
+          text: "Slow-burn romantic dramas",
+          value: "slow_burn_romance",
+          genrePoints: { romance: 3, drama: 2 },
+          nextQuestion: 16
+        },
+        {
+          text: "Quirky character studies",
+          value: "quirky_characters",
+          genrePoints: { comedy: 2, drama: 2 },
+          nextQuestion: 17
+        }
+      ],
+      nextQuestion: 15
+    },
+    // Genre-specific questions (various paths)
+    {
+      id: 6,
+      type: 'genre',
+      text: "What comedy style makes you laugh most?",
+      options: [
+        {
+          text: "Witty dialogue and clever humor",
+          value: "witty_humor",
+          genrePoints: { comedy: 3, romance: 1 }
+        },
+        {
+          text: "Physical comedy and slapstick",
+          value: "physical_comedy",
+          genrePoints: { comedy: 3 }
+        },
+        {
+          text: "Dark/satirical comedy",
+          value: "dark_comedy",
+          genrePoints: { comedy: 2, drama: 1 }
         }
       ]
     },
     {
-      id: 5,
-      text: "Choose your movie pace preference",
+      id: 7,
+      type: 'genre',
+      text: "What romantic element do you enjoy most?",
       options: [
         {
-          text: "Fast & action-packed",
-          value: "fast",
-          image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200&h=200&fit=crop",
-          genrePoints: { action: 4, adventure: 3, thriller: 2 }
+          text: "Slow-burn emotional connection",
+          value: "slow_burn",
+          genrePoints: { romance: 3, drama: 2 }
         },
         {
-          text: "Slow & atmospheric",
-          value: "slow",
-          image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?w=200&h=200&fit=crop",
-          genrePoints: { drama: 3, romance: 2, documentary: 2 }
+          text: "Passionate, intense relationships",
+          value: "passionate",
+          genrePoints: { romance: 3, drama: 1 }
         },
         {
-          text: "Fun & energetic",
-          value: "fun",
-          image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=200&h=200&fit=crop",
-          genrePoints: { comedy: 4, animation: 2, musical: 1 }
+          text: "Light-hearted romantic comedy",
+          value: "romcom",
+          genrePoints: { romance: 2, comedy: 2 }
+        }
+      ]
+    },
+    {
+      id: 8,
+      type: 'genre',
+      text: "What kind of action gets your heart racing?",
+      options: [
+        {
+          text: "Epic battles and large-scale conflicts",
+          value: "epic_battles",
+          genrePoints: { action: 3, adventure: 2 }
         },
         {
-          text: "Mysterious & unfolding",
-          value: "mysterious_pace",
-          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
-          genrePoints: { mystery: 4, thriller: 3, drama: 1 }
+          text: "Hand-to-hand combat and martial arts",
+          value: "martial_arts",
+          genrePoints: { action: 3 }
+        },
+        {
+          text: "High-speed chases and stunts",
+          value: "high_speed",
+          genrePoints: { action: 3, thriller: 1 }
+        }
+      ]
+    },
+    {
+      id: 9,
+      type: 'genre',
+      text: "What type of drama moves you most?",
+      options: [
+        {
+          text: "Historical and period dramas",
+          value: "historical_drama",
+          genrePoints: { drama: 3, history: 2 }
+        },
+        {
+          text: "Contemporary social issues",
+          value: "social_issues",
+          genrePoints: { drama: 3 }
+        },
+        {
+          text: "Personal growth and transformation",
+          value: "personal_growth",
+          genrePoints: { drama: 3, romance: 1 }
+        }
+      ]
+    },
+    {
+      id: 10,
+      type: 'genre',
+      text: "What romantic conflict interests you?",
+      options: [
+        {
+          text: "Forbidden love across boundaries",
+          value: "forbidden_love",
+          genrePoints: { romance: 3, drama: 2 }
+        },
+        {
+          text: "Second chance at love",
+          value: "second_chance",
+          genrePoints: { romance: 3, drama: 1 }
+        },
+        {
+          text: "Friends turning into lovers",
+          value: "friends_lovers",
+          genrePoints: { romance: 2, comedy: 1 }
+        }
+      ]
+    },
+    {
+      id: 11,
+      type: 'genre',
+      text: "What mystery element intrigues you most?",
+      options: [
+        {
+          text: "Whodunit murder mysteries",
+          value: "whodunit",
+          genrePoints: { mystery: 3, crime: 2 }
+        },
+        {
+          text: "Psychological mind games",
+          value: "psychological",
+          genrePoints: { thriller: 3, mystery: 2 }
+        },
+        {
+          text: "Supernatural mysteries",
+          value: "supernatural",
+          genrePoints: { mystery: 2, horror: 2, fantasy: 1 }
+        }
+      ]
+    },
+    {
+      id: 12,
+      type: 'genre',
+      text: "What adventure challenge excites you?",
+      options: [
+        {
+          text: "Discovering lost treasures",
+          value: "lost_treasures",
+          genrePoints: { adventure: 3, action: 1 }
+        },
+        {
+          text: "Surviving in wilderness",
+          value: "wilderness_survival",
+          genrePoints: { adventure: 3, drama: 1 }
+        },
+        {
+          text: "Exploring ancient mysteries",
+          value: "ancient_mysteries",
+          genrePoints: { adventure: 3, mystery: 1 }
+        }
+      ]
+    },
+    {
+      id: 13,
+      type: 'genre',
+      text: "What sci-fi concept fascinates you?",
+      options: [
+        {
+          text: "Space exploration and aliens",
+          value: "space_aliens",
+          genrePoints: { scifi: 3, adventure: 1 }
+        },
+        {
+          text: "Future technology and AI",
+          value: "future_tech",
+          genrePoints: { scifi: 3, thriller: 1 }
+        },
+        {
+          text: "Time travel and alternate realities",
+          value: "time_travel",
+          genrePoints: { scifi: 3, mystery: 1 }
+        }
+      ]
+    },
+    {
+      id: 14,
+      type: 'genre',
+      text: "What urban challenge interests you?",
+      options: [
+        {
+          text: "Heists and criminal underworld",
+          value: "heists",
+          genrePoints: { action: 2, crime: 3, thriller: 1 }
+        },
+        {
+          text: "Corporate espionage",
+          value: "espionage",
+          genrePoints: { thriller: 3, action: 1 }
+        },
+        {
+          text: "Survival in dystopian cities",
+          value: "dystopian",
+          genrePoints: { action: 2, scifi: 2, thriller: 1 }
+        }
+      ]
+    },
+    {
+      id: 15,
+      type: 'genre',
+      text: "What family dynamic appeals to you?",
+      options: [
+        {
+          text: "Multi-generational stories",
+          value: "multi_generational",
+          genrePoints: { drama: 3, comedy: 1 }
+        },
+        {
+          text: "Parent-child relationships",
+          value: "parent_child",
+          genrePoints: { drama: 3, comedy: 1 }
+        },
+        {
+          text: "Found family and friendships",
+          value: "found_family",
+          genrePoints: { comedy: 2, drama: 2 }
+        }
+      ]
+    },
+    {
+      id: 16,
+      type: 'genre',
+      text: "What romantic obstacle is most compelling?",
+      options: [
+        {
+          text: "Cultural/social differences",
+          value: "cultural_differences",
+          genrePoints: { romance: 3, drama: 2 }
+        },
+        {
+          text: "Personal insecurities and growth",
+          value: "personal_insecurities",
+          genrePoints: { romance: 3, drama: 1 }
+        },
+        {
+          text: "External circumstances keeping them apart",
+          value: "external_circumstances",
+          genrePoints: { romance: 3, drama: 1 }
+        }
+      ]
+    },
+    {
+      id: 17,
+      type: 'genre',
+      text: "What quirky element do you enjoy?",
+      options: [
+        {
+          text: "Eccentric characters and communities",
+          value: "eccentric_characters",
+          genrePoints: { comedy: 2, drama: 1 }
+        },
+        {
+          text: "Magical realism and whimsy",
+          value: "magical_realism",
+          genrePoints: { fantasy: 2, comedy: 1, drama: 1 }
+        },
+        {
+          text: "Offbeat humor and situations",
+          value: "offbeat_humor",
+          genrePoints: { comedy: 3 }
         }
       ]
     }
@@ -180,82 +439,137 @@ export class QuizComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {}
-
   selectOption(optionValue: string) {
-    this.answers[this.currentQuestionIndex] = optionValue;
+    const currentQuestion = this.questions[this.currentQuestionIndex];
+    const selectedOption = currentQuestion.options.find(opt => opt.value === optionValue);
     
-    // Add selection animation
-    const selectedElement = document.querySelector(`[data-value="${optionValue}"]`);
-    selectedElement?.classList.add('selected');
-    
-    setTimeout(() => {
-      if (this.currentQuestionIndex < this.questions.length - 1) {
-        this.currentQuestionIndex++;
-      } else {
-        this.calculateResult();
-      }
-    }, 500);
+    if (selectedOption) {
+      this.answers[this.currentQuestionIndex] = optionValue;
+      
+      // Add animation delay
+      setTimeout(() => {
+        // Determine next question
+        const nextQuestionId = selectedOption.nextQuestion || currentQuestion.nextQuestion;
+        
+        if (nextQuestionId) {
+          // Find the index of the next question
+          const nextIndex = this.questions.findIndex(q => q.id === nextQuestionId);
+          if (nextIndex !== -1) {
+            this.currentQuestionIndex = nextIndex;
+          } else {
+            // If no specific next question, calculate results
+            this.calculateResult();
+          }
+        } else {
+          // End of questionnaire
+          this.calculateResult();
+        }
+      }, 400);
+    }
   }
 
   calculateResult() {
     const genreScores: { [key: string]: number } = {
       action: 0, adventure: 0, comedy: 0, drama: 0, 
       romance: 0, thriller: 0, scifi: 0, horror: 0,
-      mystery: 0, animation: 0, documentary: 0, musical: 0
+      mystery: 0, fantasy: 0, crime: 0, musical: 0,
+      biography: 0, history: 0
     };
 
+    // Calculate scores from all answers
     this.answers.forEach((answer, index) => {
-      const question = this.questions[index];
-      const selectedOption = question.options.find(opt => opt.value === answer);
+      const question = this.questions.find(q => 
+        this.questions.indexOf(q) === index
+      );
       
-      if (selectedOption) {
-        Object.keys(selectedOption.genrePoints).forEach(genre => {
-          genreScores[genre] += selectedOption.genrePoints[genre];
-        });
+      if (question) {
+        const selectedOption = question.options.find(opt => opt.value === answer);
+        if (selectedOption) {
+          Object.keys(selectedOption.genrePoints).forEach(genre => {
+            genreScores[genre] += selectedOption.genrePoints[genre];
+          });
+        }
       }
     });
 
-    // Find top genre
-    let maxScore = 0;
-    let topGenre = 'comedy'; // default
-    
-    Object.keys(genreScores).forEach(genre => {
-      if (genreScores[genre] > maxScore) {
-        maxScore = genreScores[genre];
-        topGenre = genre;
-      }
-    });
+    // Get top 3 genres
+    const sortedGenres = Object.entries(genreScores)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 3)
+      .map(([genre]) => genre);
 
-    this.resultGenre = topGenre;
+    this.topGenres = sortedGenres;
     this.showResult = true;
     
-    // Set result message based on genre
-    const genreMessages: { [key: string]: string } = {
-      action: "Action-packed adventures with thrilling sequences!",
-      adventure: "Epic journeys to unknown worlds and exciting quests!",
-      comedy: "Light-hearted fun and laughter-filled entertainment!",
-      drama: "Emotional stories with deep character development!",
-      romance: "Heartwarming love stories and emotional connections!",
-      thriller: "Edge-of-your-seat suspense and mystery!",
-      scifi: "Futuristic worlds and technological wonders!",
-      horror: "Spooky tales and chilling experiences!",
-      mystery: "Intriguing puzzles and mind-bending plots!",
-      animation: "Colorful animated worlds for all ages!",
-      documentary: "Real-life stories and educational content!",
-      musical: "Catchy tunes and spectacular performances!"
-    };
-
-    this.resultMessage = `Your perfect match is ${this.resultGenre.toUpperCase()}! ${genreMessages[topGenre]}`;
+    // Create user profile based on answers
+    this.createUserProfile();
   }
 
-  goToSearch() {
+  createUserProfile() {
+    const profile: any = {
+      mood: '',
+      preferredSettings: [],
+      favoriteElements: []
+    };
+
+    // Analyze answers to build profile
+    this.answers.forEach((answer, index) => {
+      const question = this.questions.find(q => 
+        this.questions.indexOf(q) === index
+      );
+      
+      if (question) {
+        switch (question.type) {
+          case 'mood':
+            profile.mood = answer;
+            break;
+          case 'setting':
+            profile.preferredSettings.push(answer);
+            break;
+          case 'character':
+            profile.characterPreferences = answer;
+            break;
+          case 'style':
+            profile.viewingStyle = answer;
+            break;
+        }
+      }
+    });
+
+    this.userProfile = profile;
+  }
+
+  getGenreDescription(genre: string): string {
+    const descriptions: { [key: string]: string } = {
+      action: "High-energy films with thrilling sequences and physical feats",
+      adventure: "Epic journeys to exotic locations and exciting quests",
+      comedy: "Light-hearted entertainment that brings laughter and joy",
+      drama: "Emotional stories with deep character development",
+      romance: "Heartwarming tales of love and connection",
+      thriller: "Edge-of-your-seat suspense and tension",
+      scifi: "Futuristic worlds and technological imagination",
+      horror: "Spooky tales that send chills down your spine",
+      mystery: "Intriguing puzzles and mind-bending plots",
+      fantasy: "Magical worlds and extraordinary possibilities",
+      crime: "Gritty stories from the criminal underworld",
+      musical: "Catchy tunes and spectacular performances"
+    };
+    
+    return descriptions[genre] || "Great stories that match your taste";
+  }
+
+  goToSearchWithGenre(genre: string) {
     this.router.navigate(['/search'], { 
-      queryParams: { genre: this.resultGenre } 
+      queryParams: { genre: genre } 
     });
   }
 
   get progressPercentage(): number {
-    return ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
+    const totalQuestions = 5; // Average path length
+    return Math.min(100, ((this.currentQuestionIndex + 1) / totalQuestions) * 100);
+  }
+
+  getCurrentQuestion(): Question {
+    return this.questions[this.currentQuestionIndex];
   }
 }
