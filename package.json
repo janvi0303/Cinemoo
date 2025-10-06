@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "render-build": "npm install && ng build --configuration production",
+    "render-start": "ng serve"
   },
   "private": true,
   "dependencies": {
@@ -21,13 +23,16 @@
     "canvas-confetti": "^1.9.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "express": "^4.18.0",
+    "@angular/ssr": "^14.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.9",
     "@angular/cli": "~14.2.9",
     "@angular/compiler-cli": "^14.2.0",
     "@types/canvas-confetti": "^1.6.4",
+    "@types/express": "^4.17.13",
     "@types/jasmine": "~4.0.0",
     "@types/node": "^14.18.34",
     "jasmine-core": "~4.3.0",
