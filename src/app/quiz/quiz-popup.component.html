@@ -1,0 +1,40 @@
+<div class="popup-overlay" *ngIf="showPopup">
+  <div class="popup-container">
+    <div class="popup-header">
+      <i class="fas fa-film"></i>
+      <h3>Welcome to Cinemo! 🎬</h3>
+    </div>
+    
+    <div class="popup-content">
+      <p>Take our quick 5-question quiz to discover your perfect movie genre and get personalized recommendations!</p>
+      
+      <div class="popup-features">
+        <div class="feature">
+          <i class="fas fa-bolt"></i>
+          <span>Overcome cold start problem</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-heart"></i>
+          <span>Personalized recommendations</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-rocket"></i>
+          <span>Better movie discovery</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="popup-actions">
+      <button class="popup-btn primary" (click)="takeQuiz()">
+        Take Quiz Now
+      </button>
+      <button class="popup-btn secondary" (click)="closePopup()">
+        Skip for Now
+      </button>
+    </div>
+    
+    <div class="popup-timer">
+      <p>Redirecting to quiz in {{ countdown }} seconds...</p>
+    </div>
+  </div>
+</div>
